@@ -19,7 +19,7 @@ AoCCodeCreator class >> open [
 	^ self new open
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'actions' }
 AoCCodeCreator >> buttonClicked [
 
 	| className |
@@ -36,13 +36,13 @@ AoCCodeCreator >> buttonClicked [
 	self inform: 'Created class ' , className
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'execution' }
 AoCCodeCreator >> classNameAvailable [
 
 	^ (Smalltalk hasClassNamed: self classNameForDay) not
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'execution' }
 AoCCodeCreator >> classNameForDay [
 
 	| paddedDay |
@@ -50,26 +50,35 @@ AoCCodeCreator >> classNameForDay [
 	^ 'AoCDay' , paddedDay
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'execution' }
 AoCCodeCreator >> createClasses: aString [
 
-	(Object << aString asSymbol
-		slots: {  };
-		package: 'AoC2024') install.
+	| packageName testPackageName |
+	packageName := 'AoC' , yearPresenter number asString.
+	testPackageName := packageName , '-Tests'.
 
-	(TestCase << (aString , 'Test') asSymbol
-		slots: {  };
-		package: 'AoC2024-Tests') install.
+	((Object << aString asSymbol)
+		 slots: {  };
+		 package: packageName) install.
+
+	((TestCase << (aString , 'Test') asSymbol)
+		 slots: {  };
+		 package: testPackageName) install
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'execution' }
 AoCCodeCreator >> createPackagesIfNecessary [
 
-	(SystemOrganization packageNames includes: 'AoC2024') ifFalse: [
-		SystemOrganization addPackage: 'AoC2024' ].
+	| packageName testPackageName |
+	packageName := self packageNameForYear.
+	testPackageName := self testPackageNameForYear.
 
-	(SystemOrganization packageNames includes: 'AoC2024-Tests') ifFalse: [
-		SystemOrganization addPackage: 'AoC2024-Tests' ]
+	(SystemOrganization packageOrganizer packageNames includes:
+		 packageName) ifFalse: [ SystemOrganization addPackage: packageName ].
+
+	(SystemOrganization packageOrganizer packageNames includes:
+		 testPackageName) ifFalse: [
+		SystemOrganization addPackage: testPackageName ]
 ]
 
 { #category : 'layout' }
@@ -150,6 +159,17 @@ AoCCodeCreator >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'as yet unclassified' }
+AoCCodeCreator >> packageNameForYear [
+
+	^ 'AoC' , yearPresenter number asString
+]
+
+{ #category : 'tests' }
+AoCCodeCreator >> testPackageNameForYear [
+	^ self packageNameForYear, '-Tests'.
+]
+
+{ #category : 'actions' }
 AoCCodeCreator >> updateButtonState: selection [
 	buttonPresenter enabled: self classNameAvailable
 ]
