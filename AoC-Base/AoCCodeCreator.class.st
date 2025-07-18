@@ -9,8 +9,8 @@ Class {
 		'dayPresenter',
 		'dayLabelPresenter'
 	],
-	#category : 'MorphicTutorial',
-	#package : 'MorphicTutorial'
+	#category : 'AoC-Base',
+	#package : 'AoC-Base'
 }
 
 { #category : 'instance creation' }
