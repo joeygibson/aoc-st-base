@@ -182,6 +182,8 @@ AoCCodeCreator >> initializePresenters [
 { #category : 'initialization' }
 AoCCodeCreator >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
+	
 	aWindowPresenter
 		title: 'AoC Code Creator';
 		initialExtent: 300 @ 170;
