@@ -7,7 +7,9 @@ Class {
 		'yearPresenter',
 		'yearLabelPresenter',
 		'dayPresenter',
-		'dayLabelPresenter'
+		'dayLabelPresenter',
+		'pathLabelPresenter',
+		'pathPresenter'
 	],
 	#category : 'AoC-Base',
 	#package : 'AoC-Base'
@@ -22,8 +24,9 @@ AoCCodeCreator class >> open [
 { #category : 'actions' }
 AoCCodeCreator >> buttonClicked [
 
-	| className |
+	| className testClassName |
 	className := self classNameForDay.
+	testClassName := className , 'Test'.
 
 	self createPackagesIfNecessary.
 
@@ -32,8 +35,11 @@ AoCCodeCreator >> buttonClicked [
 	buttonPresenter enabled: false.
 
 	(Smalltalk at: className asSymbol) browse.
+	(Smalltalk at: testClassName asSymbol) browse.
 
-	self inform: 'Created class ' , className
+	self inform: ('Created {1}, {2}' format: {
+				 className.
+				 testClassName })
 ]
 
 { #category : 'execution' }
@@ -51,19 +57,27 @@ AoCCodeCreator >> classNameForDay [
 ]
 
 { #category : 'execution' }
-AoCCodeCreator >> createClasses: aString [
+AoCCodeCreator >> createClasses: theClassName [
 
-	| packageName testPackageName |
+	| packageName testPackageName testClass testClassName theClass year day|
+	
+	year := yearPresenter text.
+	day := dayPresenter number printPaddedWith: $0 to: 2.
+	testClassName := theClassName , 'Test'.
 	packageName := 'AoC' , yearPresenter number asString.
 	testPackageName := packageName , '-Tests'.
 
-	((Object << aString asSymbol)
-		 slots: {  };
-		 package: packageName) install.
+	(AoCBase << theClassName asSymbol package: packageName) install.
 
-	((TestCase << (aString , 'Test') asSymbol)
-		 slots: {  };
-		 package: testPackageName) install
+	(AoCBaseTest << testClassName asSymbol package: testPackageName)
+		install.
+
+	theClass := Smalltalk classNamed: theClassName.
+	testClass := Smalltalk classNamed: testClassName.
+	testClass basePath: pathPresenter text.
+	testClass mainClass: theClass.
+	testClass day: day.
+	testClass year: year.
 ]
 
 { #category : 'execution' }
@@ -84,7 +98,16 @@ AoCCodeCreator >> createPackagesIfNecessary [
 { #category : 'layout' }
 AoCCodeCreator >> defaultLayout [
 
-	| yearContainerPresenter dayContainerPresenter |
+	| pathContainerPresenter yearContainerPresenter dayContainerPresenter |
+	pathContainerPresenter := SpPresenter new.
+	pathContainerPresenter layout: (SpBoxLayout newLeftToRight
+			 add: pathLabelPresenter withConstraints: [ :c |
+					 c
+						 height: 25;
+						 width: 45 ];
+			 add: pathPresenter;
+			 yourself).
+
 	yearContainerPresenter := SpPresenter new.
 	yearContainerPresenter layout: (SpBoxLayout newLeftToRight
 			 add: yearLabelPresenter withConstraints: [ :c |
@@ -105,6 +128,8 @@ AoCCodeCreator >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		  spacing: 10;
+		  add: pathContainerPresenter
+		  withConstraints: [ :c | c height: 25 ];
 		  add: yearContainerPresenter
 		  withConstraints: [ :c | c height: 25 ];
 		  add: dayContainerPresenter withConstraints: [ :c | c height: 25 ];
@@ -114,12 +139,18 @@ AoCCodeCreator >> defaultLayout [
 
 { #category : 'initialization' }
 AoCCodeCreator >> initializePresenters [
-
+	
+	pathLabelPresenter := self newLabel.
+	pathPresenter := self newTextInput .
 	yearLabelPresenter := self newLabel.
 	yearPresenter := self newNumberInput.
 	dayLabelPresenter := self newLabel.
 	dayPresenter := self newNumberInput.
 	buttonPresenter := self newButton.
+	
+	pathLabelPresenter label: 'Path'.
+	
+	pathPresenter text: FileLocator home fullName, '/Projects/' .
 		
 	yearLabelPresenter label: 'Year'.
 	
@@ -139,7 +170,7 @@ AoCCodeCreator >> initializePresenters [
 		climbRate: 1;
 		digits: 0.
 
-	dayPresenter whenSelectionChangedDo: [ :selection |
+	dayPresenter whenNumberChangedDo: [ :selection |
 		self updateButtonState: selection ].
 
 	buttonPresenter
@@ -153,12 +184,12 @@ AoCCodeCreator >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: 'AoC Code Creator';
-		initialExtent: 300 @ 135;
+		initialExtent: 300 @ 170;
 		resizable: false;
 		centered
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'actions' }
 AoCCodeCreator >> packageNameForYear [
 
 	^ 'AoC' , yearPresenter number asString
@@ -166,10 +197,12 @@ AoCCodeCreator >> packageNameForYear [
 
 { #category : 'tests' }
 AoCCodeCreator >> testPackageNameForYear [
-	^ self packageNameForYear, '-Tests'.
+
+	^ self packageNameForYear , '-Tests'
 ]
 
 { #category : 'actions' }
 AoCCodeCreator >> updateButtonState: selection [
+	
 	buttonPresenter enabled: self classNameAvailable
 ]
