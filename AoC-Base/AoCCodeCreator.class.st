@@ -59,8 +59,7 @@ AoCCodeCreator >> classNameForDay [
 { #category : 'execution' }
 AoCCodeCreator >> createClasses: theClassName [
 
-	| packageName testPackageName testClass testClassName theClass year day|
-	
+	| packageName testPackageName testClassName year day |
 	year := yearPresenter text.
 	day := dayPresenter number printPaddedWith: $0 to: 2.
 	testClassName := theClassName , 'Test'.
@@ -70,14 +69,7 @@ AoCCodeCreator >> createClasses: theClassName [
 	(AoCBase << theClassName asSymbol package: packageName) install.
 
 	(AoCBaseTest << testClassName asSymbol package: testPackageName)
-		install.
-
-	theClass := Smalltalk classNamed: theClassName.
-	testClass := Smalltalk classNamed: testClassName.
-	testClass basePath: pathPresenter text.
-	testClass mainClass: theClass.
-	testClass day: day.
-	testClass year: year.
+		install
 ]
 
 { #category : 'execution' }

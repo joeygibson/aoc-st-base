@@ -11,48 +11,6 @@ Class {
 }
 
 { #category : 'accessing' }
-AoCBaseTest class >> basePath [
-	^ BasePath 
-]
-
-{ #category : 'initialization' }
-AoCBaseTest class >> basePath: aPath [
-	BasePath := aPath.
-]
-
-{ #category : 'accessing' }
-AoCBaseTest class >> day [
-
-	^ Day
-]
-
-{ #category : 'accessing' }
-AoCBaseTest class >> day: anObject [
-
-	Day := anObject
-]
-
-{ #category : 'accessing' }
-AoCBaseTest class >> mainClass [
-	^ MainClass.
-]
-
-{ #category : 'accessing' }
-AoCBaseTest class >> mainClass: mainClass [
-	MainClass := mainClass.
-]
-
-{ #category : 'accessing' }
-AoCBaseTest class >> year [
-	^ Year. 
-]
-
-{ #category : 'instance creation' }
-AoCBaseTest class >> year: aYear [
-	Year := aYear.
-]
-
-{ #category : 'accessing' }
 AoCBaseTest >> day [
 
 	^ day
