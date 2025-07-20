@@ -2,13 +2,9 @@ Class {
 	#name : 'AoCBaseTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'inst'
-	],
-	#classVars : [
-		'BasePath',
-		'Day',
-		'MainClass',
-		'Year'
+		'inst',
+		'day',
+		'path'
 	],
 	#category : 'AoC-Base',
 	#package : 'AoC-Base'
@@ -56,21 +52,37 @@ AoCBaseTest class >> year: aYear [
 	Year := aYear.
 ]
 
-{ #category : 'utilities' }
-AoCBaseTest >> readInputFileAsLines: fileName [
+{ #category : 'accessing' }
+AoCBaseTest >> day [
 
-	| fileRef dayName |
-	dayName := 'day' , self class day asString.
-
-	fileRef := BasePath asFileReference / dayName / fileName.
-
-	^ fileRef contents lines
+	^ day
 ]
 
-{ #category : 'running' }
-AoCBaseTest >> setUp [
+{ #category : 'accessing' }
+AoCBaseTest >> day: anObject [
 
-	super setUp.
+	day := anObject
+]
 
-	inst := MainClass new
+{ #category : 'accessing' }
+AoCBaseTest >> path [
+
+	^ path
+]
+
+{ #category : 'accessing' }
+AoCBaseTest >> path: anObject [
+
+	path := anObject
+]
+
+{ #category : 'utilities' }
+AoCBaseTest >> readInputFileAsLines: fileName for: aDay onPath: aPath [
+
+	| fileRef dayName |
+	dayName := 'day' , aDay.
+
+	fileRef := aPath asFileReference / dayName / fileName.
+
+	^ fileRef contents lines
 ]
