@@ -66,7 +66,11 @@ AoCCodeCreator >> createClasses: theClassName [
 	packageName := 'AoC' , yearPresenter number asString.
 	testPackageName := packageName , '-Tests'.
 
-	(AoCBase << theClassName asSymbol package: packageName) install.
+	((AoCBase << theClassName asSymbol)
+		 package: packageName;
+		 comment: ('Day{1} of Advent of Code {2}.' format: {
+						  day.
+						  year })) install.
 
 	(AoCBaseTest << testClassName asSymbol package: testPackageName)
 		install
