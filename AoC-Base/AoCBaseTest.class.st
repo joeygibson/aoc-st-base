@@ -22,6 +22,12 @@ AoCBaseTest >> day: anObject [
 	day := anObject
 ]
 
+{ #category : 'utilities' }
+AoCBaseTest >> increaseTimeout: secs [
+
+	self timeLimit: (Duration seconds: secs)
+]
+
 { #category : 'accessing' }
 AoCBaseTest >> path [
 
