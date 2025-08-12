@@ -5,6 +5,20 @@ Class {
 	#package : 'AoC-Base'
 }
 
+{ #category : 'as yet unclassified' }
+AoCBase >> find: thing inGrid: grid [
+
+	| height width point |
+	height := grid height.
+	width := grid width.
+	point := nil.
+
+	grid withIndexesDo: [ :c :r :v |
+		v = thing ifTrue: [ point := c @ r ] ].
+
+	^ point
+]
+
 { #category : 'parsing' }
 AoCBase >> parseToDictGrid: lines withConverter: aBlock [
 
