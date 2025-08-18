@@ -43,10 +43,15 @@ AoCBaseTest >> path: anObject [
 { #category : 'utilities' }
 AoCBaseTest >> readInputFileAsLines: fileName for: aDay onPath: aPath [
 
-	| fileRef dayName |
+	| fileRef dayName allLines |
 	dayName := 'day' , aDay.
 
 	fileRef := aPath asFileReference / dayName / fileName.
 
-	^ fileRef contents lines
+	allLines := fileRef contents lines.
+	
+	[ allLines isNotEmpty and: [ allLines last isEmpty ] ] whileTrue: [
+		allLines := allLines allButLast ].
+	
+	^ allLines
 ]
