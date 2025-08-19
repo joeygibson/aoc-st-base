@@ -34,8 +34,8 @@ AoCCodeCreator >> buttonClicked [
 
 	buttonPresenter enabled: false.
 
-	(Smalltalk at: className asSymbol) browse.
-	(Smalltalk at: testClassName asSymbol) browse.
+	"(Smalltalk at: className asSymbol) browse.
+	(Smalltalk at: testClassName asSymbol) browse."
 
 	self inform: ('Created {1}, {2}' format: {
 				 className.
