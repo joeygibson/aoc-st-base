@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'map',
 		'startPoint',
-		'endPoint'
+		'endPoint',
+		'current'
 	],
 	#category : 'AoC-Base',
 	#package : 'AoC-Base'
@@ -36,7 +37,7 @@ AStarSolver >> endPoint: anObject [
 
 { #category : 'executing' }
 AStarSolver >> findShortestPath [
-	| openSet closedSet cameFrom gScore fScore current neighbors |
+	| openSet closedSet cameFrom gScore fScore neighbors |
 	
 	openSet := OrderedCollection with: startPoint.
 	closedSet := Set new.
