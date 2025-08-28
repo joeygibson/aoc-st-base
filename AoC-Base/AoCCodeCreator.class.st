@@ -21,6 +21,51 @@ AoCCodeCreator class >> open [
 	^ self new open
 ]
 
+{ #category : 'adding' }
+AoCCodeCreator >> addSetupMethodToClass: testClass forDay: day andYear: year instClassName: theClassName [
+
+	| setUpSource |
+	"Now add the setUp method to the test class"
+	setUpSource := String streamContents: [ :s |
+			               s nextPutAll: 'setUp
+	super setUp.
+	self day: ''' , day , '''.
+	self path: FileLocator home / ''Projects'' / ''adventofcode' , year
+				               , ''' asString.
+
+	inst := ' , theClassName , ' new.' ].
+
+	testClass compile: setUpSource classified: 'setup'
+]
+
+{ #category : 'adding' }
+AoCCodeCreator >> addTestMethodToClass: testClass forPart: part forFile: whichFile [
+
+	| testSource name fileName |
+	name := whichFile = #sample
+		        ifTrue: [ 'Sample' ]
+		        ifFalse: [ 'RealData' ].
+	fileName := whichFile = #sample
+		            ifTrue: [ 'input0.txt' ]
+		            ifFalse: [ 'input1.txt' ].
+
+	testSource := String streamContents: [ :s |
+			              s nextPutAll:
+				              'testPart' , part asString , 'With' , name , '
+|lines res|
+
+	lines := self
+		         readInputFileAsLines: ''' , fileName , '''
+		         for: self day
+		         onPath: self path.
+
+	res := inst part' , part asString , ': lines.
+
+	self assert: res equals: 0.
+		' ].
+	testClass compile: testSource classified: 'executing'
+]
+
 { #category : 'actions' }
 AoCCodeCreator >> buttonClicked [
 
@@ -59,7 +104,7 @@ AoCCodeCreator >> classNameForDay [
 { #category : 'execution' }
 AoCCodeCreator >> createClasses: theClassName [
 
-	| packageName testPackageName testClassName year day |
+	| packageName testPackageName testClassName year day testClass builder |
 	year := yearPresenter text.
 	day := dayPresenter number printPaddedWith: $0 to: 2.
 	testClassName := theClassName , 'Test'.
@@ -72,8 +117,19 @@ AoCCodeCreator >> createClasses: theClassName [
 						  day.
 						  year })) install.
 
-	(AoCBaseTest << testClassName asSymbol package: testPackageName)
-		install
+	builder := AoCBaseTest << testClassName asSymbol package:
+		           testPackageName.
+	testClass := builder install.
+
+	self
+		addSetupMethodToClass: testClass
+		forDay: day
+		andYear: year
+		instClassName: theClassName.
+	self addTestMethodToClass: testClass forPart: 1 forFile: #sample.
+	self addTestMethodToClass: testClass forPart: 1 forFile: #real.
+	self addTestMethodToClass: testClass forPart: 2 forFile: #sample.
+	self addTestMethodToClass: testClass forPart: 2 forFile: #real
 ]
 
 { #category : 'execution' }
