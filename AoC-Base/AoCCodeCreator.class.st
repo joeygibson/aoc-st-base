@@ -79,8 +79,7 @@ AoCCodeCreator >> buttonClicked [
 
 	buttonPresenter enabled: false.
 
-	"(Smalltalk at: className asSymbol) browse.
-	(Smalltalk at: testClassName asSymbol) browse."
+	self createDirectoryIfNecessary.
 
 	self inform: ('Created {1}, {2}' format: {
 				 className.
@@ -130,6 +129,21 @@ AoCCodeCreator >> createClasses: theClassName [
 	self addTestMethodToClass: testClass forPart: 1 forFile: #real.
 	self addTestMethodToClass: testClass forPart: 2 forFile: #sample.
 	self addTestMethodToClass: testClass forPart: 2 forFile: #real
+]
+
+{ #category : 'execution' }
+AoCCodeCreator >> createDirectoryIfNecessary [
+
+	| dirName dir year day |
+	year := yearPresenter text.
+	day := dayPresenter number printPaddedWith: $0 to: 2.
+
+	dirName := FileLocator home / 'Projects' / ('adventofcode' , year)
+	           / ('day', day).
+
+	dir := dirName asFileReference.
+	
+	dir ensureCreateDirectory
 ]
 
 { #category : 'execution' }
