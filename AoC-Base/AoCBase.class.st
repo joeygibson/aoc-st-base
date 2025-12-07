@@ -1,6 +1,9 @@
 Class {
 	#name : 'AoCBase',
 	#superclass : 'Object',
+	#instVars : [
+		'cache'
+	],
 	#category : 'AoC-Base',
 	#package : 'AoC-Base'
 }
@@ -17,6 +20,14 @@ AoCBase >> find: thing inGrid: grid [
 		v = thing ifTrue: [ point := c @ r ] ].
 
 	^ point
+]
+
+{ #category : 'as yet unclassified' }
+AoCBase >> memoize: aBlock [
+
+	cache := Dictionary new.
+
+	^ [ :arg | cache at: arg ifAbsentPut: [ aBlock value: arg ] ]
 ]
 
 { #category : 'parsing' }
