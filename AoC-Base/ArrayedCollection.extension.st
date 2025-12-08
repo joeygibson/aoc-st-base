@@ -1,7 +1,7 @@
-Extension { #name : 'Array' }
+Extension { #name : 'ArrayedCollection' }
 
 { #category : '*AoC-Base' }
-Array >> cartesianProductOfLength: n [
+ArrayedCollection >> cartesianProductOfLength: n [
 
 	n = 1
 		ifTrue: [ ^ self collect: [ :e | { e } ] ]
