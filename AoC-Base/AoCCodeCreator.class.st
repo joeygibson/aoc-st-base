@@ -52,17 +52,24 @@ AoCCodeCreator >> addTestMethodToClass: testClass forPart: part forFile: whichFi
 	testSource := String streamContents: [ :s |
 			              s nextPutAll:
 				              'testPart' , part asString , 'With' , name , '
-|lines res|
+| lines res duration |
 
 	lines := self
-		         readInputFileAsLines: ''' , fileName , '''
-		         for: self day
-		         onPath: self path.
+		readInputFileAsLines: ''' , fileName , '''
+		for: self day
+		onPath: self path.
 
-	res := inst part' , part asString , ': lines.
+	duration := [ res := inst part' , part asString
+				              , ': lines ] timeToRun.
+
+	Transcript
+		show: ''part' , part asString , ': '';
+		show: duration asMilliSeconds printString;
+		show: '' ms'';
+		cr.
 
 	self assert: res equals: 0.
-		' ].
+' ].
 	testClass compile: testSource classified: 'executing'
 ]
 
