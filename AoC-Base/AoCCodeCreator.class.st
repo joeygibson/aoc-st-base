@@ -58,12 +58,12 @@ AoCCodeCreator >> addTestMethodToClass: testClass forPart: part forFile: whichFi
 		readInputFileAsLines: ''' , fileName , '''
 		for: self day
 		onPath: self path.
-
+		
 	duration := [ res := inst part' , part asString
 				              , ': lines ] timeToRun.
 
 	Transcript
-		show: ''part' , part asString , ': '';
+		show: ''part' , part asString, 'With' , name , ': '';
 		show: duration asMilliSeconds printString;
 		show: '' ms'';
 		cr.
