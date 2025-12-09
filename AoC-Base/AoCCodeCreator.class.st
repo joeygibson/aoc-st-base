@@ -63,9 +63,11 @@ AoCCodeCreator >> addTestMethodToClass: testClass forPart: part forFile: whichFi
 				              , ': lines ] timeToRun.
 
 	Transcript
-		show: ''part' , part asString, 'With' , name , ': '';
+		show: ''part' , part asString , 'With' , name , ': '';
 		show: duration asMilliSeconds printString;
-		show: '' ms'';
+		show: '' ms; '';
+		show: ''Answer: '';
+		show: res;
 		cr.
 
 	self assert: res equals: 0.
