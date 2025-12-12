@@ -40,6 +40,17 @@ AoCBaseTest >> path: anObject [
 	path := anObject
 ]
 
+{ #category : 'as yet unclassified' }
+AoCBaseTest >> readInputFile: fileName for: aDay onPath: aPath [
+
+	| fileRef dayName |
+	dayName := 'day' , aDay.
+
+	fileRef := aPath asFileReference / dayName / fileName.
+
+	^ fileRef contents
+]
+
 { #category : 'utilities' }
 AoCBaseTest >> readInputFileAsLines: fileName for: aDay onPath: aPath [
 
@@ -54,4 +65,19 @@ AoCBaseTest >> readInputFileAsLines: fileName for: aDay onPath: aPath [
 		allLines := allLines allButLast ].
 	
 	^ allLines
+]
+
+{ #category : 'as yet unclassified' }
+AoCBaseTest >> readInputFileAsSections: fileName for: aDay onPath: aPath [
+
+	| fileRef dayName contents res |
+	dayName := 'day' , aDay.
+
+	fileRef := aPath asFileReference / dayName / fileName.
+
+	contents := fileRef contents.
+
+	res := contents splitOn: String lf , String lf.
+	
+	^ res
 ]
